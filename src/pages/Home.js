@@ -127,7 +127,7 @@ export class Home extends Component {
             item
             className={classNames(classes.gridItem, classes.forum)}
           >
-            <div style={{ alignSelf: "center" }}>
+            <div style={{ alignSelf: "center", color:"white" }}>
               <p>FORUM</p>
             </div>
           </Grid>

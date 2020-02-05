@@ -7,7 +7,6 @@ import {
   Button,
   FormControlLabel,
   Checkbox,
-  Link
 } from "@material-ui/core";
 
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -19,6 +18,8 @@ import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import myConstants from "../utils/myConstants";
 import myTheme from "../utils/myTheme";
+
+import {Link} from "react-router-dom"
 
 const CssTextField = withStyles({
   root: {
@@ -124,8 +125,8 @@ const styles = theme => ({
   suggestion: {
     padding: "0px 16px 16px 0px"
   },
-  returnButton:{
-    margin: "16px 0px 16px 16px",
+  returnButton: {
+    margin: "16px 0px 16px 16px"
   }
 });
 
@@ -135,12 +136,14 @@ export class SignUp extends Component {
     return (
       <div className={classes.page}>
         <Container className={classes.container} maxWidth="xs">
-          <Button className={classes.returnButton} href="/">
-            <ArrowBackOutlinedIcon className={classes.returnIcon} />
-          </Button>
+          <Link to="/">
+            <Button className={classes.returnButton}>
+              <ArrowBackOutlinedIcon className={classes.returnIcon} />
+            </Button>
+          </Link>
           <LockOutlinedIcon className={classes.lockIcon} />
           <p className={classes.titleText} align="center">
-            Sign Up
+            Inregistrează-te
           </p>
           <form className={classes.root} noValidate autoComplete="off">
             <Grid className={classes.grid} container>
@@ -150,10 +153,10 @@ export class SignUp extends Component {
                   variant="outlined"
                   required
                   fullWidth
-                  id="email"
-                  label="Nickname"
-                  name="nickName"
-                  autoComplete="nickname"
+                  id="username"
+                  label="Nume de utilizator"
+                  name="username"
+                  autoComplete="username"
                 />
               </Grid>
               <Grid
@@ -168,7 +171,7 @@ export class SignUp extends Component {
                   variant="outlined"
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  label="Prenume"
                   autoFocus
                 />
               </Grid>
@@ -177,7 +180,7 @@ export class SignUp extends Component {
                   variant="outlined"
                   fullWidth
                   id="lastName"
-                  label="Last Name"
+                  label="Nume de familie"
                   name="lastName"
                   autoComplete="lname"
                 />
@@ -188,7 +191,7 @@ export class SignUp extends Component {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Adresă de email"
                   name="email"
                   autoComplete="email"
                 />
@@ -199,19 +202,13 @@ export class SignUp extends Component {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Parolă"
                   type="password"
                   id="password"
                   autoComplete="current-password"
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I agree to the Terms and Conditions."
-                />
               </Grid>
               <Grid item xs={12}>
                 <Button
@@ -219,15 +216,13 @@ export class SignUp extends Component {
                   variant="contained"
                   color="primary"
                 >
-                  Submit
+                  Trimite
                 </Button>
               </Grid>
             </Grid>
             <Grid container justify="flex-end">
               <Grid className={classes.suggestion} item>
-                <Link href="/login" variant="body2">
-                  Already have an account? Sign in!
-                </Link>
+              <Link to="/login">Ai deja un cont? Loghează-te!</Link>
               </Grid>
             </Grid>
           </form>

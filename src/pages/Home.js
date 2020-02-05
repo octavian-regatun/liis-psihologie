@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { getGlobal } from "reactn";
 
 import NavBar from "../components/NavBar";
 //MUI
 import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import Box from "@material-ui/core/Box";
 
 import { createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
@@ -13,126 +15,85 @@ import classNames from "classnames";
 import myTheme from "../utils/myTheme.js";
 import utilityClasses from "../utils/utilityClasses.js";
 
+import { Link } from "react-router-dom";
+
 const theme = createMuiTheme({});
 
+let homeHeight = 0;
+
 const styles = theme => ({
+  container: {
+    // height:300
+  },
   gridItem: {
+    height: "100%",
+    width: "100%",
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
+    alignItems: "center"
   },
+  paper: {
+    height: "100%"
+  },
+  text: { fontSize: "8vw" },
   elevi: {
-    backgroundColor: myTheme.colors.blue.light,
-    color: myTheme.text.primary,
-    textAlign: "center",
-    [theme.breakpoints.only("xs")]: {
-      fontSize: 30,
-      height:"50%"
-    },
-    [theme.breakpoints.only("sm")]: {
-      fontSize: 35
-    },
-    [theme.breakpoints.only("md")]: {
-      fontSize: 60
-    },
-    [theme.breakpoints.only("lg")]: {
-      fontSize: 65
-    },
-    [theme.breakpoints.only("xl")]: {
-      fontSize: 72
-    },
-    height:"60%"
-  },
-  profesori: {
     backgroundColor: myTheme.colors.blue.dark,
-    color: myTheme.text.white,
-    textAlign: "center",
-    [theme.breakpoints.only("xs")]: {
-      fontSize: 30,
-      height:"50%"
-    },
-    [theme.breakpoints.only("sm")]: {
-      fontSize: 35
-    },
-    [theme.breakpoints.only("md")]: {
-      fontSize: 50
-    },
-    [theme.breakpoints.only("lg")]: {
-      fontSize: 50
-    },
-    [theme.breakpoints.only("xl")]: {
-      fontSize: 50
-    },
-    [theme.breakpoints.up("sm")]: {
-      height:"60%"
-    },
+    transition: "background-color 0.5s ease",
+    "&:hover": {
+      backgroundColor: myTheme.hover.blue.dark
+    }
   },
-  forum: {
-    backgroundColor: myTheme.text.primary,
-    color: myTheme.text.white,
-    textAlign: "center",
-    [theme.breakpoints.only("xs")]: {
-      fontSize: 40,
-      height:"50%"
-    },
-    [theme.breakpoints.only("sm")]: {
-      fontSize: 40
-    },
-    [theme.breakpoints.only("md")]: {
-      fontSize: 50
-    },
-    [theme.breakpoints.only("lg")]: {
-      fontSize: 50
-    },
-    [theme.breakpoints.only("xl")]: {
-      fontSize: 50
-    },
-    [theme.breakpoints.up("sm")]: {
-      height:"40%"
-    },
+  profesor: {
+    backgroundColor: myTheme.colors.blue.light,
+    transition: "background-color 0.5s ease",
+    "&:hover": {
+      backgroundColor: myTheme.hover.blue.light
+    }
   },
-  container:{
-    height:"100vh"
+  link: {
+    width: "100%",
+    height: "100%",
+    textDecoration:"none"
   }
 });
 
-export class Home extends Component {
+export class Home extends React.PureComponent {
+  state = {
+    homeHeight: 0
+  };
+
+  componentDidMount() {
+    this.setState({
+      homeHeight: window.innerHeight - getGlobal().navBarHeight
+    });
+  }
+
   render() {
     const { classes } = this.props;
     return (
-      <ThemeProvider theme={theme}>
-      <NavBar />
-        <Grid className={classes.container} container>
-          <Grid
-            xs={6}
-            lg={6}
-            item
-            className={classNames(classes.gridItem, classes.elevi)}
-          >
-            <div style={{ alignSelf: "center" }}>
-              <p>ELEVI</p>
-            </div>
+      <>
+        <NavBar id="NavBar" />
+        <Grid container style={{ height: this.state.homeHeight }}>
+          <Grid item xs={6} className={classes.gridItem}>
+            <Link className={classes.link} to="/elevi/posts">
+              <Paper className={classNames(classes.gridItem, classes.elevi)}>
+                <p align="center" className={classes.text}>
+                  ELEVI
+                </p>
+              </Paper>
+            </Link>
           </Grid>
-          <Grid
-            xs={6}
-            lg={6}
-            item
-            className={classNames(classes.gridItem, classes.profesori)}
-          >
-            <div style={{ alignSelf: "center" }}>
-              <p>PROFESOR</p>
-            </div>
-          </Grid>
-          <Grid
-            xs={12}
-            item
-            className={classNames(classes.gridItem, classes.forum)}
-          >
-            <div style={{ alignSelf: "center", color:"white" }}>
-              <p>FORUM</p>
-            </div>
+          <Grid item xs={6} className={classes.gridItem}>
+            <Link className={classes.link} to="/profesor/posts">
+              <Paper className={classNames(classes.gridItem, classes.profesor)}>
+                <p align="center" className={classes.text}>
+                  PROFESOR
+                </p>
+              </Paper>
+            </Link>
           </Grid>
         </Grid>
-      </ThemeProvider>
+      </>
     );
   }
 }

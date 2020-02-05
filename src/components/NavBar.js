@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { getGlobal, setGlobal } from "reactn";
 
 import { createMuiTheme } from "@material-ui/core/styles";
 import { fade, withStyles } from "@material-ui/core/styles";
@@ -16,6 +16,8 @@ import {
 import SearchIcon from "@material-ui/icons/Search";
 
 import Logo from "../images/logo.png";
+
+import { Link } from "react-router-dom";
 
 const theme = createMuiTheme({});
 
@@ -80,55 +82,60 @@ const styles = theme => ({
   button: {
     color: myTheme.colors.blue.dark,
     [theme.breakpoints.only("xs")]: {
-        fontSize:"8px",
-        minHeight:"40px",
-        maxHeight:"48px",
-        whiteSpace:"nowrap"
+      fontSize: "8px",
+      minHeight: "40px",
+      maxHeight: "48px",
+      whiteSpace: "nowrap"
     }
   },
   buttonGroup: {
     paddingRight: "15px",
     paddingLeft: "15px"
+  },
+  link: {
+    textDecoration: "none"
   }
 });
-export class NavBar extends Component {
+
+class NavBar extends React.PureComponent {
+  componentDidMount() {
+    setGlobal({ navBarHeight: this.NavBarElement.clientHeight });
+  }
+
   render() {
     const { classes } = this.props;
 
     return (
-      <AppBar className={classes.navBar} position="sticky">
+      <AppBar
+        className={classes.navBar}
+        position="sticky"
+        ref={NavBarElement => {
+          this.NavBarElement = NavBarElement;
+        }}
+      >
         <Toolbar>
-          <img className={classes.logo} src={Logo} />
-
+          <Link className={classes.link} to="/">
+            <img className={classes.logo} src={Logo} />
+          </Link>
           <p className={classes.title}>LIIS-Psihologie</p>
-
           <ButtonGroup
             className={classes.buttonGroup}
-            color="primary"
-            aria-label="outlined primary button group"
           >
-            <Button className={classes.button} href="/login">
-              Log In
-            </Button>
-            <Button className={classes.button} href="/signup">
-              Sign Up
-            </Button>
+            <Link className={classes.link} to="/login">
+              <Button
+                variant="outlined"
+                className={classes.button}
+                style={{ marginRight: "8px" }}
+              >
+                Loghează-te
+              </Button>
+            </Link>
+            <Link className={classes.link} to="/signup">
+              <Button variant="outlined" className={classes.button}>
+                Înregistrează-te
+              </Button>
+            </Link>
           </ButtonGroup>
-
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon style={{ color: myTheme.icon.secondary }} />
-            </div>
-            <InputBase
-              style={{ color: myTheme.colors.blue.dark }}
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
         </Toolbar>
       </AppBar>
     );

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Container, TextField, Grid, Button, Link } from "@material-ui/core";
+import { Container, TextField, Grid, Button } from "@material-ui/core";
 
 import VpnKeyOutlinedIcon from "@material-ui/icons/VpnKeyOutlined";
 import ArrowBackOutlinedIcon from "@material-ui/icons/ArrowBackOutlined";
@@ -11,6 +11,8 @@ import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import myConstants from "../utils/myConstants";
 import myTheme from "../utils/myTheme";
+
+import { Link } from "react-router-dom";
 
 const CssTextField = withStyles({
   root: {
@@ -117,7 +119,7 @@ const styles = theme => ({
     width: "100%"
   },
   returnButton: {
-    margin: "16px 0px 16px 16px",
+    margin: "16px 0px 16px 16px"
   }
 });
 
@@ -128,13 +130,15 @@ export class SignUp extends Component {
       <div className={classes.page}>
         <Container className={classes.container} maxWidth="xs">
           <div className={classes.icons}>
-            <Button className={classes.returnButton} href="/">
-              <ArrowBackOutlinedIcon className={classes.returnIcon} />
-            </Button>
+            <Link to="/">
+              <Button className={classes.returnButton}>
+                <ArrowBackOutlinedIcon className={classes.returnIcon} />
+              </Button>
+            </Link>
             <VpnKeyOutlinedIcon className={classes.keyIcon} />
           </div>
           <p className={classes.titleText} align="center">
-            Log In
+            Loghează-te
           </p>
           <form className={classes.root} noValidate autoComplete="off">
             <Grid className={classes.grid} container>
@@ -143,10 +147,10 @@ export class SignUp extends Component {
                   variant="outlined"
                   required
                   fullWidth
-                  id="nickname"
-                  label="Nickname"
-                  name="nickname"
-                  autoComplete="nickname"
+                  id="username"
+                  label="Nume de utilizator"
+                  name="username"
+                  autoComplete="username"
                 />
               </Grid>
               <Grid className={classes.gridBottom} item xs={12}>
@@ -155,7 +159,7 @@ export class SignUp extends Component {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Parolă"
                   type="password"
                   id="password"
                   autoComplete="current-password"
@@ -167,15 +171,13 @@ export class SignUp extends Component {
                   variant="contained"
                   color="primary"
                 >
-                  Submit
+                  Trimite
                 </Button>
               </Grid>
             </Grid>
             <Grid container justify="flex-end">
               <Grid className={classes.suggestion} item>
-                <Link href="/signup" variant="body2">
-                  Don't have an account? Sign up!
-                </Link>
+                <Link to="/signup">Nu ai cont? Înregistrează-te!</Link>
               </Grid>
             </Grid>
           </form>

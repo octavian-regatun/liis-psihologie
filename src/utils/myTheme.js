@@ -1,17 +1,14 @@
 const myTheme = {
   colors: {
-    orange:{
-        main:"#FF9800",
-        accent:"#FF9800",
-        light:"#FFC947",
-        dark:"#C66900"
-    },
     blue:{
-        main:"#3F51B5",
-        accent:"#536DFE",
-        light:"#757DE8",
-        dark:"#002984",
-        light1:"#03cafc"
+        dark:"#0D47A1",
+        light:"#03A9F4"
+    }
+  },
+  hover:{
+    blue:{
+      dark:"#0a3576",
+      light:"#028bca"
     }
   },
   text: {

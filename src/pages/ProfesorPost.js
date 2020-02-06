@@ -8,18 +8,18 @@ import Grid from "@material-ui/core/Grid";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 
-import myConstants from "../utils/myConstants";
-import myTheme from "../utils/myTheme";
+// import myConstants from "../utils/myConstants";
+// import myTheme from "../utils/myTheme";
 
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
+// import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
-import RichText from "@madebyconnor/rich-text-to-jsx";
+// import RichText from "@madebyconnor/rich-text-to-jsx";
 
-import { Document, Page } from "react-pdf/dist/entry.webpack";
+import { Document, Page } from "react-pdf";
 
 const theme = createMuiTheme({});
 

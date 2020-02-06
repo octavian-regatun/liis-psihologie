@@ -6,7 +6,7 @@ import {
   Grid,
   Button,
   FormControlLabel,
-  Checkbox,
+  Checkbox
 } from "@material-ui/core";
 
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -19,7 +19,11 @@ import classNames from "classnames";
 import myConstants from "../utils/myConstants";
 import myTheme from "../utils/myTheme";
 
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
+
+import KeyboardEventHandler from "react-keyboard-event-handler";
+
+import axios from "axios";
 
 const CssTextField = withStyles({
   root: {
@@ -131,10 +135,48 @@ const styles = theme => ({
 });
 
 export class SignUp extends Component {
+  submit = () => {
+    let form = {
+      username: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: ""
+    };
+
+    form.username = document.getElementById("username").value;
+    form.firstName = document.getElementById("firstName").value;
+    form.lastName = document.getElementById("lastName").value;
+    form.email = document.getElementById("email").value;
+    form.password = document.getElementById("password").value;
+
+    console.log(form);
+
+    axios
+      .post(
+        "https://liis-psihologie-server.herokuapp.com/api/auth/signup",
+        form
+      )
+      .then(res => {
+        if (res.data.success) {
+          console.log("Te-ai înregistrat!");
+        } else {
+          console.log("Nu te-ai putut înregistra!");
+          console.log(res);
+        }
+      });
+  };
+
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.page}>
+        <KeyboardEventHandler
+          handleKeys={["enter"]}
+          onKeyEvent={(key, e) => {
+            document.getElementById("submitButton").click();
+          }}
+        />
         <Container className={classes.container} maxWidth="xs">
           <Link to="/">
             <Button className={classes.returnButton}>
@@ -208,13 +250,14 @@ export class SignUp extends Component {
                   autoComplete="current-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-              </Grid>
+              <Grid item xs={12}></Grid>
               <Grid item xs={12}>
                 <Button
                   className={classes.button}
                   variant="contained"
                   color="primary"
+                  onClick={this.submit}
+                  id="submitButton"
                 >
                   Trimite
                 </Button>
@@ -222,7 +265,7 @@ export class SignUp extends Component {
             </Grid>
             <Grid container justify="flex-end">
               <Grid className={classes.suggestion} item>
-              <Link to="/login">Ai deja un cont? Loghează-te!</Link>
+                <Link to="/login">Ai deja un cont? Loghează-te!</Link>
               </Grid>
             </Grid>
           </form>

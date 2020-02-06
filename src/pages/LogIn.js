@@ -8,11 +8,19 @@ import ArrowBackOutlinedIcon from "@material-ui/icons/ArrowBackOutlined";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 
-import classNames from "classnames";
-import myConstants from "../utils/myConstants";
+// import classNames from "classnames";
+// import myConstants from "../utils/myConstants";
 import myTheme from "../utils/myTheme";
 
 import { Link } from "react-router-dom";
+
+import axios from "axios";
+
+import Cookies from "js-cookie";
+
+import KeyboardEventHandler from "react-keyboard-event-handler";
+
+import { withRouter } from "react-router-dom";
 
 const CssTextField = withStyles({
   root: {
@@ -124,10 +132,44 @@ const styles = theme => ({
 });
 
 export class SignUp extends Component {
+  submit = () => {
+    let form = {
+      username: "",
+      password: ""
+    };
+
+    form.username = document.getElementById("username").value;
+    form.password = document.getElementById("password").value;
+
+    console.log(form);
+
+    axios
+      .post(
+        "https://liis-psihologie-server.herokuapp.com/api/auth/login",
+        form
+      )
+      .then(res => {
+        if (res.data.success) {
+          console.log("Te-ai logat!");
+          Cookies.set("token", res.data.token);
+          this.props.history.push("/");
+        } else {
+          console.log("Nu te-ai putut loga!");
+          console.log(res);
+        }
+      });
+  };
+
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.page}>
+        <KeyboardEventHandler
+          handleKeys={["enter"]}
+          onKeyEvent={(key, e) => {
+            document.getElementById("submitButton").click();
+          }}
+        />
         <Container className={classes.container} maxWidth="xs">
           <div className={classes.icons}>
             <Link to="/">
@@ -170,6 +212,8 @@ export class SignUp extends Component {
                   className={classes.button}
                   variant="contained"
                   color="primary"
+                  onClick={this.submit}
+                  id="submitButton"
                 >
                   Trimite
                 </Button>
@@ -187,4 +231,4 @@ export class SignUp extends Component {
   }
 }
 
-export default withStyles(styles)(SignUp);
+export default withRouter(withStyles(styles)(SignUp));

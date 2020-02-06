@@ -10,8 +10,8 @@ import * as contentful from "contentful";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 
-import myConstants from "../utils/myConstants";
-import myTheme from "../utils/myTheme";
+// import myConstants from "../utils/myConstants";
+// import myTheme from "../utils/myTheme";
 
 import ProfesorCard from "../components/ProfesorCard";
 
@@ -36,7 +36,6 @@ export class Profesor extends Component {
       entries.items.forEach(post => {
         posts.push(post);
       });
-      console.log(posts);
       loading = false;
       this.setState({ posts: posts });
     });

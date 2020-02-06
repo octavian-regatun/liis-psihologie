@@ -1,7 +1,7 @@
 // import logo from "./logo.svg";
 // import "./App.css";
 
-import React, { Component } from "react";
+import React, { getGlobal, setGlobal } from "reactn";
 
 // React Router
 import {
@@ -27,6 +27,10 @@ import EleviPost from "./pages/EleviPost";
 import Profesor from "./pages/Profesor";
 import ProfesorPost from "./pages/ProfesorPost";
 
+import PrivateRoute from "react-router-private";
+
+import isLoggedIn from "./utils/auth";
+
 const theme = createMuiTheme({});
 
 const styles = theme => ({
@@ -35,7 +39,16 @@ const styles = theme => ({
   }
 });
 
-export class App extends Component {
+export class App extends React.PureComponent {
+  state = {
+    isLoggedIn: null
+  };
+  componentDidMount() {
+    isLoggedIn().then(res => {
+      setGlobal({ isLoggedIn: res });
+      this.setState({ isLoggedIn: getGlobal().isLoggedIn });
+    });
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -50,10 +63,15 @@ export class App extends Component {
             // <Route path="/elevi/posts" component={Elevi} />
             // <Route path="/elevi/posts/:post" component={EleviPost} />
           }
-          <Route exact path="/profesor/posts" component={Profesor} />
-          {
-            <Route path="/profesor/posts/:post" component={ProfesorPost} />
-          }
+          <PrivateRoute
+            exact
+            path="/profesor/posts"
+            exact
+            component={Profesor}
+            authStatus={this.state.isLoggedIn}
+            redirectURL="/login"
+          />
+          {<Route path="/profesor/posts/:post" component={ProfesorPost} />}
           <Redirect exact from="/" to="/home" />
         </Switch>
       </Router>

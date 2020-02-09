@@ -1,4 +1,4 @@
-import React, { getGlobal } from "reactn";
+import React from "react";
 
 import NavBar from "../components/NavBar";
 //MUI
@@ -16,6 +16,8 @@ import myTheme from "../utils/myTheme.js";
 import utilityClasses from "../utils/utilityClasses.js";
 
 import { Link } from "react-router-dom";
+
+import { withGlobalState } from "react-globally";
 
 const theme = createMuiTheme({});
 
@@ -53,19 +55,43 @@ const styles = theme => ({
   link: {
     width: "100%",
     height: "100%",
-    textDecoration:"none"
+    textDecoration: "none"
   }
 });
 
-export class Home extends React.PureComponent {
+export class Home extends React.Component {
   state = {
-    homeHeight: 0
+    homeHeight: 200
   };
 
   componentDidMount() {
+
+    console.log("window: " + window.innerHeight);
+    console.log("navBarHeight: " + this.props.globalState.navBarHeight);
+
     this.setState({
-      homeHeight: window.innerHeight - getGlobal().navBarHeight
+      homeHeight: window.innerHeight - this.props.globalState.navBarHeight
     });
+    console.log("homeHeight: " + this.state.homeHeight);
+  }
+
+  componentDidUpdate(previousProps, previousState) {
+    this.setState({
+      homeHeight: window.innerHeight - this.props.globalState.navBarHeight
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      nextProps.globalState.isLoggedIn != this.props.globalState.isLoggedIn ||
+      nextProps.globalState.navBarHeight !=
+        this.props.globalState.navBarHeight ||
+      nextState.homeHeight != this.state.homeHeight
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   render() {
@@ -98,4 +124,4 @@ export class Home extends React.PureComponent {
   }
 }
 
-export default withStyles(styles)(Home);
+export default withGlobalState(withStyles(styles)(Home));

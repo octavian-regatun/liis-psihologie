@@ -22,6 +22,8 @@ import KeyboardEventHandler from "react-keyboard-event-handler";
 
 import { withRouter } from "react-router-dom";
 
+import { withGlobalState } from "react-globally";
+
 const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
@@ -144,15 +146,13 @@ export class SignUp extends Component {
     console.log(form);
 
     axios
-      .post(
-        "https://liis-psihologie-server.herokuapp.com/api/auth/login",
-        form
-      )
+      .post("https://liis-psihologie-server.herokuapp.com/api/auth/login", form)
       .then(res => {
         if (res.data.success) {
           console.log("Te-ai logat!");
           Cookies.set("token", res.data.token);
           this.props.history.push("/");
+          this.props.setGlobalState({ isLoggedIn: true });
         } else {
           console.log("Nu te-ai putut loga!");
           console.log(res);
@@ -192,7 +192,7 @@ export class SignUp extends Component {
                   id="username"
                   label="Nume de utilizator"
                   name="username"
-                  autoComplete="username"
+                  autoComplete="liis-psihologie-username"
                 />
               </Grid>
               <Grid className={classes.gridBottom} item xs={12}>
@@ -231,4 +231,4 @@ export class SignUp extends Component {
   }
 }
 
-export default withRouter(withStyles(styles)(SignUp));
+export default withGlobalState(withRouter(withStyles(styles)(SignUp)));

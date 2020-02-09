@@ -1,4 +1,4 @@
-import React, { getGlobal, setGlobal } from "reactn";
+import React from "react";
 
 import { createMuiTheme } from "@material-ui/core/styles";
 import { fade, withStyles } from "@material-ui/core/styles";
@@ -22,6 +22,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 import Cookies from "js-cookie";
+
+import { withGlobalState } from "react-globally";
 
 const theme = createMuiTheme({});
 
@@ -101,7 +103,7 @@ const styles = theme => ({
   }
 });
 
-class NavBar extends React.PureComponent {
+class NavBar extends React.Component {
   logout = () => {
     axios
       .get(
@@ -109,7 +111,7 @@ class NavBar extends React.PureComponent {
           "token"
         )}`
       )
-      .then((err, res) => {
+      .then((res, err) => {
         if (err) {
           console.log("Nu te-ai putut deloga");
           console.log(err);
@@ -118,14 +120,28 @@ class NavBar extends React.PureComponent {
           console.log(res.data.message);
         } else if (res.data.success) {
           console.log("Te-ai delogat");
-          setGlobal({ isLoggedIn: false });
+          this.props.setGlobalState({ isLoggedIn: false });
           Cookies.remove("token");
         }
       });
   };
 
   componentDidMount() {
-    setGlobal({ navBarHeight: this.NavBarElement.clientHeight });
+    this.props.setGlobalState({
+      navBarHeight: this.NavBarElement.clientHeight
+    });
+  }
+
+  componentDidUpdate() {
+
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.globalState.isLoggedIn != this.props.globalState.isLoggedIn) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   render() {
@@ -144,7 +160,15 @@ class NavBar extends React.PureComponent {
             <img className={classes.logo} src={Logo} />
           </Link>
           <p className={classes.title}>LIIS-Psihologie</p>
-          {getGlobal().isLoggedIn ? (
+          {this.props.globalState.isLoggedIn ? (
+            <Button
+              variant="outlined"
+              className={classes.button}
+              onClick={this.logout}
+            >
+              Deloghează-te
+            </Button>
+          ) : (
             <div className={classes.buttonGroup}>
               <Link className={classes.link} to="/login">
                 <Button
@@ -161,14 +185,6 @@ class NavBar extends React.PureComponent {
                 </Button>
               </Link>
             </div>
-          ) : (
-            <Button
-              variant="outlined"
-              className={classes.button}
-              onClick={this.logout}
-            >
-              Deloghează-te
-            </Button>
           )}
         </Toolbar>
       </AppBar>
@@ -176,4 +192,4 @@ class NavBar extends React.PureComponent {
   }
 }
 
-export default withStyles(styles)(NavBar);
+export default withGlobalState(withStyles(styles)(NavBar));

@@ -1,7 +1,7 @@
 // import logo from "./logo.svg";
 // import "./App.css";
 
-import React, { getGlobal, setGlobal } from "reactn";
+import React from "react";
 
 // React Router
 import {
@@ -31,6 +31,8 @@ import PrivateRoute from "react-router-private";
 
 import isLoggedIn from "./utils/auth";
 
+import { withGlobalState } from "react-globally";
+
 const theme = createMuiTheme({});
 
 const styles = theme => ({
@@ -39,16 +41,23 @@ const styles = theme => ({
   }
 });
 
-export class App extends React.PureComponent {
-  state = {
-    isLoggedIn: null
-  };
+export class App extends React.Component {
   componentDidMount() {
-    isLoggedIn().then(res => {
-      setGlobal({ isLoggedIn: res });
-      this.setState({ isLoggedIn: getGlobal().isLoggedIn });
-    });
+
   }
+
+componentDidUpdate(){
+
+}
+
+  shouldComponentUpdate(nextProps) {
+    if (nextProps != this.props.globalState.isLoggedIn) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -68,7 +77,7 @@ export class App extends React.PureComponent {
             path="/profesor/posts"
             exact
             component={Profesor}
-            authStatus={this.state.isLoggedIn}
+            authStatus={this.props.globalState.isLoggedIn}
             redirectURL="/login"
           />
           {<Route path="/profesor/posts/:post" component={ProfesorPost} />}
@@ -79,4 +88,4 @@ export class App extends React.PureComponent {
   }
 }
 
-export default withStyles(styles)(App);
+export default withGlobalState(withStyles(styles)(App));

@@ -5,19 +5,28 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 import { Provider } from "react-globally";
-import Logic from "./components/Logic";
+import { SnackbarProvider } from "notistack";
 
 const initialState = {
-  isLoggedIn: null,
-  navBarHeight: 300,
+  isLoggedIn: false,
+  navBarHeight: 300
 };
 
 ReactDOM.render(
   <div>
     <Provider globalState={initialState}>
-      <Logic>
+      <SnackbarProvider
+        maxSnack={3}
+        iconVariant={{
+          success: "✅",
+          error: "✖️",
+          warning: "⚠️",
+          info: "ℹ️"
+        }}
+        // content={(key, message) => <p id={key}> {message} </p>}
+      >
         <App />
-      </Logic>
+      </SnackbarProvider>
     </Provider>
   </div>,
   document.getElementById("root")

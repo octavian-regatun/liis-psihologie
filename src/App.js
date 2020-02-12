@@ -26,6 +26,7 @@ import Elevi from "./pages/Elevi";
 import EleviPost from "./pages/EleviPost";
 import Profesor from "./pages/Profesor";
 import ProfesorPost from "./pages/ProfesorPost";
+import CreatePost from "./pages/CreatePost";
 
 import PrivateRoute from "react-router-private";
 
@@ -43,15 +44,15 @@ const styles = theme => ({
 
 export class App extends React.Component {
   componentDidMount() {
-
+    isLoggedIn().then(res => {
+      this.props.setGlobalState({
+        isLoggedIn: res
+      });
+    });
   }
 
-componentDidUpdate(){
-
-}
-
   shouldComponentUpdate(nextProps) {
-    if (nextProps != this.props.globalState.isLoggedIn) {
+    if (nextProps.globalState.isLoggedIn != this.props.globalState.isLoggedIn) {
       return true;
     } else {
       return false;
@@ -64,23 +65,36 @@ componentDidUpdate(){
       <Router>
         {/* <Navbar /> */}
         <Switch>
-          <Route path="/signup" component={SignUp} />
-          <Route path="/login" component={LogIn} />
-
           <Route path="/home" component={Home} />
           {
             // <Route path="/elevi/posts" component={Elevi} />
             // <Route path="/elevi/posts/:post" component={EleviPost} />
           }
+          <Route exact path="/login" component={LogIn} />
+
+          <Route exact path="/signup" component={SignUp} />
+
+          <PrivateRoute
+            exact
+            path="/createPost"
+            component={CreatePost}
+            authStatus={this.props.globalState.isLoggedIn}
+            redirectURL="/login"
+          />
           <PrivateRoute
             exact
             path="/profesor/posts"
-            exact
             component={Profesor}
             authStatus={this.props.globalState.isLoggedIn}
             redirectURL="/login"
           />
-          {<Route path="/profesor/posts/:post" component={ProfesorPost} />}
+          <PrivateRoute
+            exact
+            path="/profesor/posts/:post"
+            component={ProfesorPost}
+            authStatus={this.props.globalState.isLoggedIn}
+            redirectURL="/login"
+          />
           <Redirect exact from="/" to="/home" />
         </Switch>
       </Router>

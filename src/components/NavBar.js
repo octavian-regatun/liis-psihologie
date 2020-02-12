@@ -24,6 +24,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 import { withGlobalState } from "react-globally";
+import { withRouter } from "react-router-dom";
 
 const theme = createMuiTheme({});
 
@@ -92,7 +93,8 @@ const styles = theme => ({
       minHeight: "40px",
       maxHeight: "48px",
       whiteSpace: "nowrap"
-    }
+    },
+    marginRight: "8px"
   },
   buttonGroup: {
     paddingRight: "15px",
@@ -104,6 +106,10 @@ const styles = theme => ({
 });
 
 class NavBar extends React.Component {
+  state = {
+    role: null
+  };
+
   logout = () => {
     axios
       .get(
@@ -122,6 +128,7 @@ class NavBar extends React.Component {
           console.log("Te-ai delogat");
           this.props.setGlobalState({ isLoggedIn: false });
           Cookies.remove("token");
+          this.props.history.push("/");
         }
       });
   };
@@ -130,18 +137,22 @@ class NavBar extends React.Component {
     this.props.setGlobalState({
       navBarHeight: this.NavBarElement.clientHeight
     });
-  }
 
-  componentDidUpdate() {
-
-  }
-
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.globalState.isLoggedIn != this.props.globalState.isLoggedIn) {
-      return true;
-    } else {
-      return false;
-    }
+    // axios
+    //   .get(
+    //     `https://liis-psihologie-server.herokuapp.com/api/account/role?token=${Cookies.get(
+    //       "token"
+    //     )}`
+    //   )
+    //   .then((res, err) => {
+    //     if(err){
+    //       console.log("Nu am putut determina rolul");
+    //       console.log(err);
+    //     }
+    //     else{
+    //     this.setState({role:res.data.role})
+    //     }
+    //   });
   }
 
   render() {
@@ -161,13 +172,20 @@ class NavBar extends React.Component {
           </Link>
           <p className={classes.title}>LIIS-Psihologie</p>
           {this.props.globalState.isLoggedIn ? (
-            <Button
-              variant="outlined"
-              className={classes.button}
-              onClick={this.logout}
-            >
-              Deloghează-te
-            </Button>
+            <div>
+              <Link className={classes.link} to="/createPost">
+                <Button variant="outlined" className={classes.button}>
+                  Postează
+                </Button>
+              </Link>
+              <Button
+                variant="outlined"
+                className={classes.button}
+                onClick={this.logout}
+              >
+                Deloghează-te
+              </Button>
+            </div>
           ) : (
             <div className={classes.buttonGroup}>
               <Link className={classes.link} to="/login">
@@ -192,4 +210,4 @@ class NavBar extends React.Component {
   }
 }
 
-export default withGlobalState(withStyles(styles)(NavBar));
+export default withGlobalState(withRouter(withStyles(styles)(NavBar)));

@@ -24,6 +24,8 @@ import { withRouter } from "react-router-dom";
 
 import { withGlobalState } from "react-globally";
 
+import { withSnackbar } from "notistack";
+
 const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
@@ -134,6 +136,10 @@ const styles = theme => ({
 });
 
 export class SignUp extends Component {
+  componentDidMount() {
+    console.log(this.props.globalState.isLoggedIn);
+  }
+
   submit = () => {
     let form = {
       username: "",
@@ -153,12 +159,34 @@ export class SignUp extends Component {
           Cookies.set("token", res.data.token);
           this.props.history.push("/");
           this.props.setGlobalState({ isLoggedIn: true });
+          this.props.enqueueSnackbar("Te-ai logat!", {
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "center"
+            },
+            variant: "success",
+            autoHideDuration: 3000
+          });
         } else {
           console.log("Nu te-ai putut loga!");
+          this.props.enqueueSnackbar("Nu te-ai putut loga!", {
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "center"
+            },
+            variant: "error",
+            autoHideDuration: 3000
+          });
           console.log(res);
         }
       });
   };
+
+  componentDidUpdate() {
+    if (this.props.globalState.isLoggedIn) {
+      // this.props.history.push("/");
+    }
+  }
 
   render() {
     const { classes } = this.props;
@@ -231,4 +259,6 @@ export class SignUp extends Component {
   }
 }
 
-export default withGlobalState(withRouter(withStyles(styles)(SignUp)));
+export default withGlobalState(
+  withSnackbar(withRouter(withStyles(styles)(SignUp)))
+);

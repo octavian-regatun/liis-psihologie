@@ -19,7 +19,11 @@ import Typography from "@material-ui/core/Typography";
 
 // import RichText from "@madebyconnor/rich-text-to-jsx";
 
-import { Document, Page } from "react-pdf";
+import { Document, Page } from "react-pdf/dist/entry.webpack";
+
+import IconButton from "@material-ui/core/IconButton";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 
 const theme = createMuiTheme({});
 
@@ -46,6 +50,11 @@ const styles = theme => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center"
+  },
+  buttons: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 
@@ -57,6 +66,18 @@ export class ProfesorPost extends Component {
 
   onDocumentLoadSuccess = ({ numPages }) => {
     this.setState({ numPages });
+  };
+
+  nextPage = () => {
+    if (this.state.pageNumber < this.state.numPages) {
+      this.setState({ pageNumber: ++this.state.pageNumber });
+    }
+  };
+
+  previousPage = () => {
+    if (this.state.pageNumber > 1) {
+      this.setState({ pageNumber: --this.state.pageNumber });
+    }
   };
 
   render() {
@@ -86,6 +107,24 @@ export class ProfesorPost extends Component {
                   >
                     <Page pageNumber={pageNumber} />
                   </Document>
+                  <div className={classes.buttons}>
+                    <IconButton
+                      aria-label="delete"
+                      className={classes.margin}
+                      size="small"
+                      onClick={this.previousPage}
+                    >
+                      <ArrowBackIosIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      className={classes.margin}
+                      size="small"
+                      onClick={this.nextPage}
+                    >
+                      <ArrowForwardIosIcon />
+                    </IconButton>
+                  </div>
                   <p align="center">
                     Page {pageNumber} of {numPages}
                   </p>

@@ -25,6 +25,10 @@ import KeyboardEventHandler from "react-keyboard-event-handler";
 
 import axios from "axios";
 
+import { withRouter } from "react-router-dom";
+
+import {withGlobalState} from "react-globally"
+
 const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
@@ -167,6 +171,12 @@ export class SignUp extends Component {
       });
   };
 
+  componentDidUpdate() {
+    if (this.props.globalState.isLoggedIn) {
+      this.props.history.push("/");
+    }
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -275,4 +285,4 @@ export class SignUp extends Component {
   }
 }
 
-export default withStyles(styles)(SignUp);
+export default withGlobalState(withRouter(withStyles(styles)(SignUp)));

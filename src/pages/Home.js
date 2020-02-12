@@ -65,14 +65,9 @@ export class Home extends React.Component {
   };
 
   componentDidMount() {
-
-    console.log("window: " + window.innerHeight);
-    console.log("navBarHeight: " + this.props.globalState.navBarHeight);
-
     this.setState({
       homeHeight: window.innerHeight - this.props.globalState.navBarHeight
     });
-    console.log("homeHeight: " + this.state.homeHeight);
   }
 
   componentDidUpdate(previousProps, previousState) {
@@ -83,7 +78,6 @@ export class Home extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
-      nextProps.globalState.isLoggedIn != this.props.globalState.isLoggedIn ||
       nextProps.globalState.navBarHeight !=
         this.props.globalState.navBarHeight ||
       nextState.homeHeight != this.state.homeHeight
